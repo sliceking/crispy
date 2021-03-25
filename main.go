@@ -8,11 +8,8 @@ import (
 	"time"
 )
 
-var t *template.Template
-
 func main() {
 	r := Router{ mux.NewRouter()}
-	t = template.Must(template.ParseFiles("views/layout/layout.gohtml"))
 	r.mux.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	r.GET("/", HomeHandler)
 
@@ -28,6 +25,7 @@ func main() {
 
 func HomeHandler(w http.ResponseWriter, r *http.Request){
 	w.WriteHeader(http.StatusOK)
+	t := template.Must(template.ParseFiles("views/layout/layout.gohtml"))
 	err := t.Execute(w, "yay")
 	if err != nil {
 		log.Printf("somethign went wrong: %s", err)
